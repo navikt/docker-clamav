@@ -19,6 +19,6 @@ USER 1000
 
 COPY --from=builder /go/bin/go-clamav-rest /go-clamav-rest
 
-EXPOSE 8080
+EXPOSE 8091
 
 ENTRYPOINT ["/go-clamav-rest"]
