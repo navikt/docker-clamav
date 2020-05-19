@@ -1,14 +1,19 @@
-FROM alpine:3.11
+FROM alpine:edge
 
-ENV CLAM_VERSION=0.102.1-r0
+ENV CLAM_VERSION=0.102.3-r0
 
 RUN apk add --no-cache clamav=$CLAM_VERSION clamav-libunrar=$CLAM_VERSION
 
+# Add certificates
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+COPY *.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
 # Add clamav user
-RUN adduser -S -G clamav -u 1000 clamav_user -h /var/lib/clamav && \
-    mkdir -p /var/lib/clamav && \
+RUN adduser -S -G clamav -u 1000 clamav_user -h /store && \
+    mkdir -p /store && \
     mkdir /usr/local/share/clamav && \
-    chown -R clamav_user:clamav /var/lib/clamav /usr/local/share/clamav /etc/clamav
+    chown -R clamav_user:clamav /store /usr/local/share/clamav /etc/clamav
 
 # Configure Clam AV...
 COPY --chown=clamav_user:clamav ./*.conf /etc/clamav/
@@ -25,7 +30,6 @@ USER 1000
 # initial update of av databases
 RUN freshclam
 
-VOLUME /var/lib/clamav
 COPY --chown=clamav_user:clamav docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

@@ -1,12 +1,12 @@
 #!/bin/sh
 # bootstrap clam av service and clam av database updater
-set -m
+sh +m
 
 function process_file() {
     if [[ ! -z "$1" ]]; then
         local SETTING_LIST=$(echo "$1" | tr ',' '\n' | grep "^[A-Za-z][A-Za-z]*=.*$")
         local SETTING
-        
+
         for SETTING in ${SETTING_LIST}; do
             # Remove any existing copies of this setting.  We do this here so that
             # settings with multiple values (e.g. ExtraDatabase) can still be added
