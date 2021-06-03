@@ -1,6 +1,6 @@
 FROM alpine:edge
 
-ENV CLAM_VERSION=0.102.3-r0
+ENV CLAM_VERSION=0.103.2-r0
 
 RUN apk add --no-cache clamav=$CLAM_VERSION clamav-libunrar=$CLAM_VERSION
 
